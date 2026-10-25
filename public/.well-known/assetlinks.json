@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.lnt.timecalculator",
+        "sha256_cert_fingerprints": ["AD:11:56:28:FB:51:95:3A:E4:E4:47:EF:56:BD:C6:BF:20:F8:25:0C:8F:6C:0D:D0:DC:2F:97:A8:10:4D:3C:A6"]
+      }
+    }]

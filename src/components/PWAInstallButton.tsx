@@ -219,15 +219,27 @@ export const PWAInstallButton: React.FC = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-2.5 py-1.5 text-xs font-extrabold text-white shadow-md shadow-emerald-600/20 transition active:scale-95"
-        aria-label="Android APK and Install Options"
-      >
-        <Smartphone className="w-3.5 h-3.5" />
-        <span>{isInstalled ? 'APK Options' : 'Android APK / Install'}</span>
-      </button>
+      <div className="inline-flex items-center gap-1.5">
+        <a
+          href="/LNT-Time-Calculator.apk"
+          download="LNT-Time-Calculator.apk"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3 py-1.5 text-xs font-extrabold text-white shadow-md shadow-emerald-600/20 transition active:scale-95"
+          aria-label="Download LNT-Time-Calculator.apk"
+        >
+          <Download className="w-3.5 h-3.5" />
+          <span>Download .APK (1.4 MB)</span>
+        </a>
+
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="inline-flex items-center gap-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 px-2 py-1.5 text-xs font-semibold text-sky-400 transition"
+          aria-label="Android APK and Install Options"
+          title="More APK & Install Options"
+        >
+          <Smartphone className="w-3.5 h-3.5" />
+        </button>
+      </div>
 
       {isOpen &&
         createPortal(
@@ -241,10 +253,10 @@ export const PWAInstallButton: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-white">
-                      Install Android App / Generate .APK
+                      Download Install-Ready LNT-Time-Calculator.apk
                     </h3>
                     <p className="text-xs text-slate-400">
-                      3 ways to install L&amp;T Time Calculator on your Android phone
+                      Signed Android APK (1.4 MB) included directly in app &amp; GitHub repo
                     </p>
                   </div>
                 </div>
@@ -258,31 +270,30 @@ export const PWAInstallButton: React.FC = () => {
               </div>
 
               <div className="mt-4 space-y-4">
-                {/* OPTION 1: GitHub Automatic .APK Builder (Included in Repository) */}
-                <div className="bg-slate-950/90 border border-purple-500/40 rounded-xl p-4 space-y-2.5">
+                {/* DIRECT SIGNED .APK DOWNLOAD */}
+                <div className="bg-emerald-950/50 border border-emerald-500/50 rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-extrabold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
-                      <Package className="w-4 h-4 text-purple-400" />
-                      GitHub Auto-APK Builder (Added to Project!)
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      Install-Ready Signed Android .APK (1.4 MB)
                     </span>
-                    <span className="text-[10px] bg-purple-950 text-purple-300 px-2 py-0.5 rounded-full border border-purple-700">
-                      .github/workflows/build-android-apk.yml
+                    <span className="text-[10px] bg-emerald-900 text-emerald-200 px-2 py-0.5 rounded-full border border-emerald-600">
+                      com.lnt.timecalculator
                     </span>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    We have added <code>.github/workflows/build-android-apk.yml</code> and{' '}
-                    <code>capacitor.config.json</code> directly to your project! When you sync/export this
-                    project to GitHub:
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    <strong><code>LNT-Time-Calculator.apk</code></strong> is already compiled, signed, and saved directly inside this project (both at <code>/LNT-Time-Calculator.apk</code> and <code>/apk/LNT-Time-Calculator.apk</code> for GitHub):
                   </p>
-                  <ol className="text-xs text-slate-300 list-decimal list-inside space-y-1">
-                    <li>
-                      GitHub Actions automatically runs <strong>Build Android APK (L&amp;T Time Calculator)</strong>.
-                    </li>
-                    <li>
-                      It compiles <code>LNT-Time-Calculator.apk</code> and saves it directly into the{' '}
-                      <strong><code>apk/LNT-Time-Calculator.apk</code></strong> folder in your GitHub repository (and under the <strong>Actions → Artifacts</strong> tab).
-                    </li>
-                  </ol>
+                  <div className="pt-1">
+                    <a
+                      href="/LNT-Time-Calculator.apk"
+                      download="LNT-Time-Calculator.apk"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 transition active:scale-95"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download LNT-Time-Calculator.apk Now (1.4 MB)</span>
+                    </a>
+                  </div>
                 </div>
 
                 {/* OPTION 2: Direct Android Chrome WebAPK Install */}

@@ -145,6 +145,14 @@ CRITICAL RULES:
     }
   });
 
+  // Direct download route for the compiled & signed LNT-Time-Calculator.apk (1.4 MB)
+  app.get(['/LNT-Time-Calculator.apk', '/api/download-apk'], (_req, res) => {
+    const apkPath = path.resolve(process.cwd(), 'LNT-Time-Calculator.apk');
+    res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+    res.setHeader('Content-Disposition', 'attachment; filename="LNT-Time-Calculator.apk"');
+    res.sendFile(apkPath);
+  });
+
   // Mount Vite middleware in development or static dist in production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
