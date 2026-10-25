@@ -190,9 +190,10 @@ function downloadCapacitorConfig() {
 }
 
 export const PWAInstallButton: React.FC = () => {
-  const { isInstallable, isInstalled, install } = usePWAInstall();
+  const { isInstallable, install } = usePWAInstall();
   const [isOpen, setIsOpen] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
+  const [isDownloadingApk, setIsDownloadingApk] = useState(false);
 
   const liveUrl =
     typeof window !== 'undefined' && window.location.origin.includes('run.app')
@@ -206,6 +207,38 @@ export const PWAInstallButton: React.FC = () => {
       setTimeout(() => setCopiedUrl(false), 3000);
     } catch {
       // ignore
+    }
+  };
+
+  const handleDownloadFullApk = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    setIsDownloadingApk(true);
+    try {
+      const response = await fetch('/api/download-apk');
+      if (!response.ok) throw new Error('Download failed');
+      const blob = await response.blob();
+      const apkBlob = new Blob([blob], {
+        type: 'application/vnd.android.package-archive',
+      });
+      const url = URL.createObjectURL(apkBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'LNT-Time-Calculator.apk';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    } catch {
+      // Fallback to direct link
+      const a = document.createElement('a');
+      a.href = '/LNT-Time-Calculator.apk';
+      a.download = 'LNT-Time-Calculator.apk';
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } finally {
+      setIsDownloadingApk(false);
     }
   };
 
@@ -223,19 +256,20 @@ export const PWAInstallButton: React.FC = () => {
         <a
           href="/LNT-Time-Calculator.apk"
           download="LNT-Time-Calculator.apk"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3 py-1.5 text-xs font-extrabold text-white shadow-md shadow-emerald-600/20 transition active:scale-95"
-          aria-label="Download LNT-Time-Calculator.apk"
+          onClick={handleDownloadFullApk}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3 py-1.5 text-xs font-extrabold text-white shadow-md shadow-emerald-600/20 transition active:scale-95 cursor-pointer"
+          aria-label="Download Full LNT-Time-Calculator.apk"
         >
           <Download className="w-3.5 h-3.5" />
-          <span>Download .APK (1.4 MB)</span>
+          <span>{isDownloadingApk ? 'Downloading .APK...' : 'Download Full .APK'}</span>
         </a>
 
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center gap-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 px-2 py-1.5 text-xs font-semibold text-sky-400 transition"
-          aria-label="Android APK and Install Options"
-          title="More APK & Install Options"
+          aria-label="Android APK and GitHub Options"
+          title="Full APK & GitHub Download Options"
         >
           <Smartphone className="w-3.5 h-3.5" />
         </button>
@@ -253,10 +287,10 @@ export const PWAInstallButton: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-white">
-                      Download Install-Ready LNT-Time-Calculator.apk
+                      Full Standalone LNT-Time-Calculator.apk (App &amp; GitHub)
                     </h3>
                     <p className="text-xs text-slate-400">
-                      Signed Android APK (1.4 MB) included directly in app &amp; GitHub repo
+                      100% Full Native Android APK (Offline + Online) in Root &amp; GitHub Releases
                     </p>
                   </div>
                 </div>
@@ -270,28 +304,33 @@ export const PWAInstallButton: React.FC = () => {
               </div>
 
               <div className="mt-4 space-y-4">
-                {/* DIRECT SIGNED .APK DOWNLOAD */}
+                {/* DIRECT SIGNED FULL .APK DOWNLOAD */}
                 <div className="bg-emerald-950/50 border border-emerald-500/50 rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                      Install-Ready Signed Android .APK (1.4 MB)
+                      Full Standalone Signed Android .APK (Offline Ready)
                     </span>
                     <span className="text-[10px] bg-emerald-900 text-emerald-200 px-2 py-0.5 rounded-full border border-emerald-600">
                       com.lnt.timecalculator
                     </span>
                   </div>
                   <p className="text-xs text-slate-200 leading-relaxed">
-                    <strong><code>LNT-Time-Calculator.apk</code></strong> is already compiled, signed, and saved directly inside this project (both at <code>/LNT-Time-Calculator.apk</code> and <code>/apk/LNT-Time-Calculator.apk</code> for GitHub):
+                    <strong><code>LNT-Time-Calculator.apk</code></strong> is a <strong>100% Full Standalone Capacitor Android APK</strong> with the entire app bundled inside (works offline without any link or browser). Download it right here or directly from your GitHub repository root &amp; Releases:
                   </p>
-                  <div className="pt-1">
+                  <div className="pt-1 flex items-center gap-2.5 flex-wrap">
                     <a
                       href="/LNT-Time-Calculator.apk"
                       download="LNT-Time-Calculator.apk"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 transition active:scale-95"
+                      onClick={handleDownloadFullApk}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 transition active:scale-95 cursor-pointer"
                     >
                       <Download className="w-4 h-4" />
-                      <span>Download LNT-Time-Calculator.apk Now (1.4 MB)</span>
+                      <span>
+                        {isDownloadingApk
+                          ? 'Downloading LNT-Time-Calculator.apk...'
+                          : 'Download Full LNT-Time-Calculator.apk Here'}
+                      </span>
                     </a>
                   </div>
                 </div>

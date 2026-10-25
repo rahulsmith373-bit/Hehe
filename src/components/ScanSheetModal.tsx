@@ -215,8 +215,16 @@ export const ScanSheetModal: React.FC<ScanSheetModalProps> = ({
       setPreviewImage(previewUrl);
 
       const expectedDays = days.map((d) => d.dayOfMonth);
+      const apiBase =
+        typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' ||
+          window.location.protocol === 'capacitor:' ||
+          window.location.protocol === 'file:') &&
+        !window.location.port
+          ? 'https://ais-pre-yt2jr3dqunpd75q2o6hje6-382725416346.europe-west2.run.app'
+          : '';
 
-      const response = await fetch('/api/scan-timesheet', {
+      const response = await fetch(`${apiBase}/api/scan-timesheet`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

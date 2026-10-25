@@ -2,7 +2,6 @@
   "appId": "com.lnt.timecalculator",
   "appName": "L&T Time Calculator",
   "webDir": "dist",
-  "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https"
   }
