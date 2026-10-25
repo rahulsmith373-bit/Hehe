@@ -1,0 +1,91 @@
+name: Auto-Build & Publish LNT-Time-Calculator.apk
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'LNT-Time-Calculator.apk'
+      - 'apk/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build LNT-Time-Calculator.apk
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Setup Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Dependencies & Build Web App
+        run: |
+          npm install
+          npm run build
+
+      - name: Initialize Capacitor Android Project
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android --no-save
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+
+      - name: Build Signed Debug APK (LNT-Time-Calculator.apk)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk ../LNT-Time-Calculator.apk
+          mkdir -p ../apk
+          cp app/build/outputs/apk/debug/app-debug.apk ../apk/LNT-Time-Calculator.apk
+
+      - name: Save LNT-Time-Calculator.apk Directly to GitHub Repo Root
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f LNT-Time-Calculator.apk apk/LNT-Time-Calculator.apk
+          git diff --staged --quiet || (git commit -m "chore: add compiled LNT-Time-Calculator.apk for direct download [skip ci]" && git push)
+
+      - name: Publish Direct Download in GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          tag_name: v1.0-apk
+          name: "L&T Time Calculator Android App (.APK)"
+          body: |
+            ### 📲 Direct Android APK Download
+            Tap **`LNT-Time-Calculator.apk`** below under **Assets** to download and install the app on your Android phone.
+            - **Cycle**: 26th to 25th (`26 Sep – 25 Oct`, `26 Oct – 25 Nov`, etc.)
+            - **Time Format**: Strict 24-Hour (`05:30`, `20:00`, `15:00`, `07:00`)
+            - **Duty Policy**: Fixed 8h Regular Duty + 1h Break (9h Shift)
+          files: |
+            LNT-Time-Calculator.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LNT-Time-Calculator-APK
+          path: LNT-Time-Calculator.apk

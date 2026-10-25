@@ -258,15 +258,42 @@ export const PWAInstallButton: React.FC = () => {
               </div>
 
               <div className="mt-4 space-y-4">
-                {/* OPTION 1: Direct Android Chrome WebAPK Install */}
+                {/* OPTION 1: GitHub Automatic .APK Builder (Included in Repository) */}
+                <div className="bg-slate-950/90 border border-purple-500/40 rounded-xl p-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+                      <Package className="w-4 h-4 text-purple-400" />
+                      GitHub Auto-APK Builder (Added to Project!)
+                    </span>
+                    <span className="text-[10px] bg-purple-950 text-purple-300 px-2 py-0.5 rounded-full border border-purple-700">
+                      .github/workflows/build-android-apk.yml
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    We have added <code>.github/workflows/build-android-apk.yml</code> and{' '}
+                    <code>capacitor.config.json</code> directly to your project! When you sync/export this
+                    project to GitHub:
+                  </p>
+                  <ol className="text-xs text-slate-300 list-decimal list-inside space-y-1">
+                    <li>
+                      GitHub Actions automatically runs <strong>Build Android APK (L&amp;T Time Calculator)</strong>.
+                    </li>
+                    <li>
+                      It compiles <code>LNT-Time-Calculator.apk</code> and saves it directly into the{' '}
+                      <strong><code>apk/LNT-Time-Calculator.apk</code></strong> folder in your GitHub repository (and under the <strong>Actions → Artifacts</strong> tab).
+                    </li>
+                  </ol>
+                </div>
+
+                {/* OPTION 2: Direct Android Chrome WebAPK Install */}
                 <div className="bg-slate-950/90 border border-emerald-500/40 rounded-xl p-4 space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4" />
-                      Option 1: Direct Android Install (WebAPK — Fastest)
+                      Direct Android Install (WebAPK — Instant)
                     </span>
                     <span className="text-[10px] bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-700">
-                      Recommended
+                      No Wait
                     </span>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
@@ -307,30 +334,17 @@ export const PWAInstallButton: React.FC = () => {
                   </div>
                 </div>
 
-                {/* OPTION 2: Cloud .APK File Compiler (PWABuilder) */}
+                {/* OPTION 3: Cloud .APK File Compiler (PWABuilder) */}
                 <div className="bg-slate-950/90 border border-blue-500/30 rounded-xl p-4 space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-extrabold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
                       <Package className="w-4 h-4" />
-                      Option 2: Compile Downloadable .APK File (PWABuilder)
+                      Compile Downloadable .APK File (PWABuilder)
                     </span>
                     <span className="text-[10px] bg-blue-950 text-sky-300 px-2 py-0.5 rounded-full border border-blue-800">
                       192px &amp; 512px Icons Ready
                     </span>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    We have configured full Android manifest &amp; PNG icons (<code>192x192</code> &amp;{' '}
-                    <code>512x512</code>). To download a standalone <code>.apk</code> file:
-                  </p>
-                  <ol className="text-xs text-slate-300 list-decimal list-inside space-y-1">
-                    <li>
-                      Click <strong>Copy App Link</strong> above (<code>{liveUrl}</code>).
-                    </li>
-                    <li>
-                      Open <strong>PWABuilder.com</strong>, paste the link, and tap{' '}
-                      <strong>Package for Store → Android → Download APK</strong>.
-                    </li>
-                  </ol>
                   <div className="pt-1 flex items-center gap-2 flex-wrap">
                     <a
                       href={`https://www.pwabuilder.com/reportcard?site=${encodeURIComponent(liveUrl)}`}
