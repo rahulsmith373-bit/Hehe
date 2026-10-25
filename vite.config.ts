@@ -11,18 +11,44 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['icon.svg'],
+        includeAssets: [
+          'icon.svg',
+          'apple-touch-icon.png',
+          'pwa-192x192.png',
+          'pwa-512x512.png',
+          'pwa-maskable-512x512.png',
+        ],
         manifest: {
           id: '/',
           name: 'L&T Time Calculator',
           short_name: 'L&T Time',
-          description: 'L&T Workforce timesheet calculator with fixed 8h duty + 1h break (9h shift), bulk check-in control, and sheet scanner.',
+          description:
+            'L&T Workforce timesheet calculator (26th to 25th cycle) with fixed 8h duty + 1h break (9h shift), 24h time inputs, and AI sheet scanner.',
           theme_color: '#0B132B',
           background_color: '#0B132B',
           display: 'standalone',
+          orientation: 'portrait',
           start_url: '/',
           scope: '/',
           icons: [
+            {
+              src: '/pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: '/pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: '/pwa-maskable-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
             {
               src: '/icon.svg',
               sizes: '512x512',
@@ -31,8 +57,12 @@ export default defineConfig(() => {
             },
           ],
         },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        },
         devOptions: {
           enabled: true,
+          type: 'module',
         },
       }),
     ],
