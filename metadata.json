@@ -1,0 +1,6 @@
+{
+  "name": "DutyMate Pro",
+  "description": "Premium industrial workforce timesheet, daily duty, and overtime calculator with smart weekly-off engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
